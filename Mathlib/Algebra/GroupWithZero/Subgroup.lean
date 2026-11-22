@@ -84,6 +84,9 @@ lemma pointwise_smul_toAddSubmonoid (a : M) (S : AddSubgroup A) :
 lemma smul_mem_pointwise_smul (m : A) (a : M) (S : AddSubgroup A) : m ∈ S → a • m ∈ a • S :=
   (Set.smul_mem_smul_set : _ → _ ∈ a • (S : Set A))
 
+instance : CovariantClass M (AddSubgroup A) HSMul.hSMul LE.le :=
+  ⟨fun _ _ => image_mono⟩
+
 lemma mem_smul_pointwise_iff_exists (m : A) (a : M) (S : AddSubgroup A) :
     m ∈ a • S ↔ ∃ s : A, s ∈ S ∧ a • s = m :=
   (Set.mem_smul_set : m ∈ a • (S : Set A) ↔ _)
@@ -92,15 +95,14 @@ instance pointwise_isCentralScalar [DistribMulAction Mᵐᵒᵖ A] [IsCentralSca
     IsCentralScalar M (AddSubgroup A) :=
   ⟨fun _ S => (congr_arg fun f => S.map f) <| AddMonoidHom.ext <| op_smul_eq_smul _⟩
 
--- TODO: Check that these lemmas are useful and uncomment.
--- @[simp]
--- lemma smul_bot (m : M) : m • (⊥ : AddSubgroup A) = ⊥ := map_bot _
+@[simp]
+lemma smul_bot (a : M) : a • (⊥ : AddSubgroup A) = ⊥ := map_bot _
 
--- lemma smul_sup (m : M) (S T : AddSubgroup A) : m • (S ⊔ T) = m • S ⊔ m • T := map_sup _ _ _
+lemma smul_sup (a : M) (S T : AddSubgroup A) : a • (S ⊔ T) = a • S ⊔ a • T := map_sup _ _ _
 
--- @[simp]
--- lemma smul_closure (m : M) (s : Set A) : m • closure s = closure (m • s) :=
---   AddMonoidHom.map_closure ..
+@[simp]
+lemma smul_closure (a : M) (s : Set A) : a • closure s = closure (a • s) :=
+  AddMonoidHom.map_closure ..
 
 scoped[Pointwise] attribute [instance] AddSubgroup.pointwise_isCentralScalar
 
